@@ -1,0 +1,136 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// --- 核心业务 ---
+
+model User {
+  id        String   @id @default(cuid())
+  openid    String   @unique
+  nickname  String?
+  avatarUrl String?
+  points    Int      @default(0)
+  level     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  records   Record[]
+  orders    Order[]
+  posts     Post[]
+  comments  Comment[]
+  complaints Complaint[]
+}
+
+model Task {
+  id        Int      @id @default(autoincrement())
+  title     String
+  reward    Int
+  type      String   // daily, weekly, once
+  radius    Int      @default(50)
+  isActive  Boolean  @default(true) // 是否启用
+  
+  records   Record[]
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  name      String
+  price     Int
+  image     String?
+  stock     Int      @default(999)
+  
+  orders    Order[]
+}
+
+model Record {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  taskId    Int
+  task      Task     @relation(fields: [taskId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@index([userId, taskId])
+}
+
+model Order {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId Int
+  product   Product  @relation(fields: [productId], references: [id])
+  points    Int      // 消耗积分
+  status    String   @default("pending") // pending, shipped, completed, cancelled
+  remark    String?  // 备注
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Route {
+  id      Int    @id @default(autoincrement())
+  key     String @unique
+  name    String
+  points  String
+}
+
+// --- 社区模块 ---
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  content   String
+  images    String?  // JSON array
+  likes     Int      @default(0)
+  status    String   @default("published") // published, pending, rejected
+  createdAt DateTime @default(now())
+  
+  comments  Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  postId    Int
+  post      Post     @relation(fields: [postId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}
+
+// --- 客服模块 ---
+
+model Complaint {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  type      String   // complaint, suggestion
+  content   String
+  contact   String?
+  status    String   @default("open") // open, processing, closed
+  createdAt DateTime @default(now())
+}
+
+// --- 系统配置 ---
+
+model Announcement {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model SystemConfig {
+  key       String   @id
+  value     String
+  desc      String?
+}

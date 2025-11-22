@@ -1,0 +1,28 @@
+.container {
+  position: relative;
+}
+
+.controls {
+  position: absolute;
+  bottom: 50rpx;
+  right: 30rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.btn {
+  background: white;
+  padding: 20rpx 30rpx;
+  border-radius: 40rpx;
+  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.2);
+  text-align: center;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.btn.primary {
+  background: #07c160;
+  color: white;
+}
+

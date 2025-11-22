@@ -1,0 +1,11 @@
+{
+  "name": "api_proxy",
+  "version": "1.0.0",
+  "description": "Proxy to Flask Server",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "axios": "^1.6.0"
+  }
+}
+

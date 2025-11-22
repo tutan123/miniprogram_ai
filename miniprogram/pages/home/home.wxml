@@ -1,0 +1,17 @@
+<view class="container">
+  <map 
+    id="myMap"
+    style="width: 100%; height: 100vh;"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    markers="{{markers}}"
+    show-location
+  ></map>
+  
+  <!-- 悬浮按钮组 -->
+  <view class="controls">
+    <cover-view class="btn" bindtap="onLocateMe">📍 定位</cover-view>
+    <cover-view class="btn primary" bindtap="onSelectRoute">🗺️ 选路线</cover-view>
+  </view>
+</view>
+

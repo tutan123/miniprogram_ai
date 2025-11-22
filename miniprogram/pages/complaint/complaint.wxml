@@ -1,0 +1,38 @@
+<view class="container">
+  <view class="header">
+    <text class="title">帮助与反馈</text>
+    <text class="subtitle">您的建议是我们前进的动力</text>
+  </view>
+
+  <view class="form-card">
+    <view class="type-selector">
+      <view class="type-item {{type==='complaint'?'active':''}}" bindtap="switchType" data-type="complaint">
+        我要投诉
+      </view>
+      <view class="type-item {{type==='suggestion'?'active':''}}" bindtap="switchType" data-type="suggestion">
+        功能建议
+      </view>
+    </view>
+
+    <view class="input-group">
+      <textarea 
+        class="content-input" 
+        placeholder="请详细描述您遇到的问题或建议..." 
+        model:value="{{content}}"
+        maxlength="200"
+      ></textarea>
+      <text class="counter">{{content.length}}/200</text>
+    </view>
+
+    <view class="input-group">
+      <input 
+        class="contact-input" 
+        placeholder="手机号/微信号 (选填，方便联系您)" 
+        model:value="{{contact}}"
+      />
+    </view>
+
+    <button class="submit-btn" bindtap="onSubmit">提交反馈</button>
+  </view>
+</view>
+

@@ -1,0 +1,82 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-center">运营数据看板</h1>
+            <br>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">总用户数</div>
+                <div class="panel-body text-center">
+                    <h3>{{ stats.user_count }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-success">
+                <div class="panel-heading">今日打卡</div>
+                <div class="panel-body text-center">
+                    <h3>{{ stats.today_checkin }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-warning">
+                <div class="panel-heading">积分池消耗</div>
+                <div class="panel-body text-center">
+                    <h3>{{ stats.total_points_consumed }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading">商品库存预警</div>
+                <div class="panel-body text-center">
+                    <h3>{{ stats.low_stock_count }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">最新加入用户</div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>昵称</th>
+                            <th>加入时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in stats.recent_users %}
+                        <tr>
+                            <td>{{ user.nickname }}</td>
+                            <td>{{ user.joined_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">快捷操作</div>
+                <div class="panel-body">
+                    <a href="/admin/product/new/" class="btn btn-success btn-block">上架新商品</a>
+                    <a href="/admin/task/new/" class="btn btn-primary btn-block">发布新任务</a>
+                    <a href="/admin/route/" class="btn btn-info btn-block">管理路线</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

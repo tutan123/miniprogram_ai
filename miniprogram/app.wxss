@@ -1,0 +1,26 @@
+/**app.wxss**/
+/* 重置全局样式，避免 flex 布局干扰页面设计 */
+page {
+  background: #f6f6f6;
+  box-sizing: border-box;
+  /* 移除全局 flex，交给各个页面自己控制 */
+}
+
+.container {
+  box-sizing: border-box;
+  min-height: 100vh;
+} 
+
+/* 通用按钮样式重置 */
+button {
+  background: initial;
+  font-weight: normal;
+}
+
+button:focus {
+  outline: 0;
+}
+
+button::after {
+  border: none;
+}
