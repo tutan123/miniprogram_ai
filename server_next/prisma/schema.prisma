@@ -16,7 +16,7 @@ model User {
   openid    String   @unique
   nickname  String?
   avatarUrl String?
-  points    Int      @default(0)
+  points    Int      @default(0)  // 确保积分不为负（SQLite 中 Int 就是整数类型）
   level     Int      @default(1)
   
   // 收货信息
@@ -68,8 +68,13 @@ model Record {
   taskId    Int
   task      Task     @relation(fields: [taskId], references: [id])
   createdAt DateTime @default(now())
+  
+  // 添加日期字段用于唯一约束（防止同一天重复打卡）
+  checkinDate String  // 格式: YYYY-MM-DD
 
+  @@unique([userId, taskId, checkinDate])  // 同一用户同一任务同一天只能打卡一次
   @@index([userId, taskId])
+  @@index([checkinDate])
 }
 
 model Order {
