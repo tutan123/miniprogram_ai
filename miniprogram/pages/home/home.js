@@ -1,6 +1,5 @@
 // pages/home/home.js
 const app = getApp()
-const FLASK_SERVER_URL = 'http://127.0.0.1:5000'; 
 
 Page({
   data: {
@@ -14,39 +13,13 @@ Page({
     this.fetchRoutes()
   },
 
-  callApi(url, method, data = {}) {
-    return new Promise((resolve, reject) => {
-      wx.request({
-        url: `${FLASK_SERVER_URL}${url}`,
-        method: method,
-        data: { ...data, openid: 'test_openid_123' },
-        success: (res) => {
-          if (res.statusCode === 200 && res.data.code === 0) resolve(res.data);
-          else reject(res.data);
-        },
-        fail: (err) => {
-          console.error(err);
-          // 失败时不拒绝，给个 Mock 数据防止地图白屏，提升体验
-          if(url.includes('routes')) {
-             resolve({
-               data: {
-                 "food": {"name": "示例路线(离线)", "points": [{"lat": 30.57, "lng": 104.06, "name": "示例点"}]}
-               }
-             })
-          } else {
-            reject(err);
-          }
-        }
-      });
-    });
-  },
-
   fetchRoutes() {
-    this.callApi('/api/routes', 'GET')
+    // [FIX] 改用 app.request，不再硬编码 URL
+    app.request('/api/routes', 'GET')
       .then(res => {
         const routes = res.data; 
         this.setData({ routes })
-        // 处理 markers ... (省略重复逻辑，保持简洁)
+        
         const markers = []
         if(routes) {
             Object.keys(routes).forEach((key, index) => {
@@ -59,12 +32,23 @@ Page({
                     longitude: startPoint.lng,
                     title: route.name,
                     width: 30,
-                    height: 30
+                    height: 30,
+                    callout: {
+                      content: route.name,
+                      padding: 10,
+                      borderRadius: 5,
+                      display: 'ALWAYS'
+                    }
                 })
             }
             })
         }
         this.setData({ markers })
+      })
+      .catch(err => {
+        console.error('地图数据加载失败', err)
+        // 失败时给个默认坐标防止白屏
+        this.onLocateMe()
       })
   },
 
@@ -72,27 +56,39 @@ Page({
      wx.getLocation({
        type: 'gcj02',
        success: (res) => {
-         this.setData({ latitude: res.latitude, longitude: res.longitude })
+         this.setData({
+           latitude: res.latitude,
+           longitude: res.longitude
+         })
        }
      })
   },
 
   onSelectRoute() {
+    if (!this.data.routes) return;
+    
+    const keys = Object.keys(this.data.routes);
+    const names = keys.map(k => this.data.routes[k].name);
+
     wx.showActionSheet({
-      itemList: ['美食路线', '购物路线', '踏青路线'],
+      itemList: names,
       success: (res) => {
-        const keys = ['food', 'shopping', 'nature'];
-        this.confirmRoute(keys[res.tapIndex]);
+        const key = keys[res.tapIndex];
+        this.confirmRoute(key);
       }
     })
   },
   
   confirmRoute(key) {
-      // 简单演示导航
       const route = this.data.routes[key];
-      if(route && route.points[0]) {
+      if(route && route.points.length > 0) {
           const pt = route.points[0];
-          wx.openLocation({ latitude: pt.lat, longitude: pt.lng, name: pt.name });
+          wx.openLocation({
+             latitude: pt.lat,
+             longitude: pt.lng,
+             name: pt.name,
+             scale: 18
+          });
       }
   }
 })

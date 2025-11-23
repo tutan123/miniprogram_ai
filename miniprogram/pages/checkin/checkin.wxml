@@ -41,11 +41,15 @@
     <view wx:if="{{tasks.length === 0}}" class="empty-tip">暂无任务</view>
   </view>
 
-  <!-- 商品列表 -->
+  <!-- 商品列表 (修复图片路径) -->
   <view class="grid-container" wx:if="{{currentTab === 'shop'}}">
     <block wx:for="{{products}}" wx:key="id">
       <view class="product-item">
-        <view class="product-img-placeholder">商品图</view>
+        <image 
+          src="{{item.image.startsWith('http') ? item.image : baseUrl + item.image}}" 
+          class="product-img" 
+          mode="aspectFill"
+        ></image>
         <view class="product-info">
           <text class="product-name">{{item.name}}</text>
           <text class="product-price">{{item.price}} 积分</text>

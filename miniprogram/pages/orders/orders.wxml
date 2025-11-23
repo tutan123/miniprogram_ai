@@ -1,0 +1,22 @@
+<view class="container">
+  <block wx:for="{{orders}}" wx:key="id">
+    <view class="order-card">
+      <view class="header">
+        <text class="time">{{item.created_at}}</text>
+        <text class="status {{item.status}}">{{item.status === 'pending' ? '待发货' : '已发货'}}</text>
+      </view>
+      <view class="content">
+        <image src="{{item.product_image.startsWith('http') ? item.product_image : baseUrl + item.product_image}}" class="img" mode="aspectFill"></image>
+        <view class="info">
+          <text class="name">{{item.product_name}}</text>
+          <text class="points">{{item.points}} 积分</text>
+        </view>
+      </view>
+      <view class="footer" wx:if="{{item.address}}">
+        <text class="address">配送至: {{item.address}}</text>
+      </view>
+    </view>
+  </block>
+  <view wx:if="{{orders.length === 0}}" class="empty">暂无订单</view>
+</view>
+

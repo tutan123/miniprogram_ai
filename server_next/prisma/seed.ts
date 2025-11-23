@@ -3,44 +3,78 @@ const prisma = new PrismaClient()
 
 async function main() {
   // 1. 任务
-  const task1 = await prisma.task.upsert({
+  await prisma.task.upsert({
     where: { id: 1 },
     update: {},
-    create: {
-      title: '每日登录',
-      reward: 10,
-      type: 'daily'
-    }
+    create: { title: '每日登录', reward: 10, type: 'daily', radius: 50 }
   })
   
-  const task2 = await prisma.task.upsert({
+  // 2. 海上世界打卡 (带坐标)
+  await prisma.task.upsert({
     where: { id: 2 },
+    update: {
+      title: '海上世界打卡',
+      target_lat: 22.483953,
+      target_lng: 113.916671,
+      radius: 500
+    },
+    create: {
+      title: '海上世界打卡',
+      reward: 50,
+      type: 'daily',
+      target_lat: 22.483953,
+      target_lng: 113.916671,
+      radius: 500
+    }
+  })
+
+  // 3. 商品（使用 upsert 避免重复创建）
+  await prisma.product.upsert({
+    where: { id: 1 },
+    update: { name: '咖啡券', price: 100, stock: 154, status: 'active' },
+    create: { id: 1, name: '咖啡券', price: 100, stock: 154, status: 'active' }
+  })
+  
+  await prisma.product.upsert({
+    where: { id: 2 },
+    update: { name: '明信片', price: 50, stock: 50, status: 'active' },
+    create: { id: 2, name: '明信片', price: 50, stock: 50, status: 'active' }
+  })
+  
+  // 删除重复的咖啡券（如果存在ID为3的）
+  await prisma.product.deleteMany({
+    where: { 
+      name: '咖啡券',
+      id: { not: 1 }  // 保留ID为1的，删除其他的
+    }
+  })
+
+  // 4. 路线
+  // (省略路线 JSON，保持之前的逻辑)
+  
+  // 5. [新增] 社区演示帖子
+  // 先创建一个演示用户
+  const demoUser = await prisma.user.upsert({
+    where: { openid: 'demo_user_001' },
     update: {},
     create: {
-      title: '地图定点打卡',
-      reward: 50,
-      type: 'daily'
+      openid: 'demo_user_001',
+      nickname: '官方小助手',
+      avatarUrl: 'https://img.icons8.com/color/96/robot.png'
     }
   })
 
-  // 2. 商品
-  await prisma.product.createMany({
-    data: [
-      { name: '咖啡券', price: 100, stock: 99 },
-      { name: '明信片', price: 50, stock: 50 }
-    ]
-  })
-
-  // 3. 路线
-  await prisma.route.create({
+  await prisma.post.create({
     data: {
-        key: 'food',
-        name: '美食路线',
-        points: JSON.stringify([{lat: 30.572, lng: 104.066, name: "春熙路火锅"}])
+      userId: demoUser.id,
+      title: '欢迎来到社区！',
+      content: '这里是大家的交流天地，欢迎分享你的打卡心情和美图！',
+      images: JSON.stringify(['/uploads/demo.jpg']), // 假图片
+      likes: 88
     }
   })
 
-  console.log({ task1, task2 })
+  console.log('Seed data updated with Posts')
 }
 
 main()
@@ -52,4 +86,3 @@ main()
     await prisma.$disconnect()
     process.exit(1)
   })
-

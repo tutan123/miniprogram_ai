@@ -4,6 +4,46 @@
 
 ---
 
+## ⚡ 常用命令 (Common Commands)
+
+### 1. 开发环境启动
+```bash
+cd server_next
+npm run dev
+```
+*   后台地址: [http://localhost:8080/admin](http://localhost:8080/admin)
+*   API 地址: [http://localhost:8080/api](http://localhost:8080/api)
+
+### 2. 数据库同步 (关键!)
+当你修改了 `prisma/schema.prisma` 文件（新增表/字段）后，**必须执行**以下两步：
+
+```bash
+# 1. 同步数据库结构 (创建表)
+npm run db:push
+
+# 2. 重新生成 TS 类型定义 (代码智能提示)
+npx prisma generate
+```
+
+---
+
+## 🚀 上线部署指南 (Deployment)
+
+### 1. 修改服务地址
+上线前，请修改 `miniprogram/app.js` 中的服务器地址：
+
+```javascript
+// 生产环境 (必须是 HTTPS)
+const FLASK_SERVER_URL = 'https://api.yourdomain.com'; 
+// 或云托管域名
+const FLASK_SERVER_URL = 'https://xxxx.ap-shanghai.app.tcloudbase.com';
+```
+
+### 2. 云存储配置
+生产环境**不要**使用本地存储，请参考 [☁️ 云存储迁移指南](docs/STORAGE_GUIDE.md) 切换到腾讯云 COS。
+
+---
+
 ## 🏗️ 技术架构深度解析
 
 本项目采用了目前业界最先进的 **"BFF (Backend for Frontend)"** 全栈架构。

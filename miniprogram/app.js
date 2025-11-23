@@ -1,25 +1,25 @@
 // app.js
-const FLASK_SERVER_URL = 'http://127.0.0.1:8080';
+const API_BASE_URL = 'http://192.168.3.215:8080'; 
 
 App({
   globalData: {
     openid: null,
-    userInfo: null
+    userInfo: null,
+    baseUrl: API_BASE_URL
   },
 
   onLaunch: function () {
+    // 尝试静默登录
     this.login();
   },
 
   login() {
     return new Promise((resolve, reject) => {
-      // [DEBUG模式] 
-      // 为了防止 "invalid appid" 报错，我们这里强制使用测试流程
-      // 如果你有真实 AppID，请把下面的 isTestMode 改为 false
-      const isTestMode = true; 
+      // [关键修改] 关闭强制测试模式
+      const isTestMode = false; 
 
       if (isTestMode) {
-        console.warn('[Dev] 使用测试账号登录...');
+        console.log('[Dev] 使用测试账号登录...');
         this._doServerLogin('test_code', resolve, reject);
         return;
       }
@@ -31,6 +31,10 @@ App({
           } else {
             reject('wx.login failed');
           }
+        },
+        fail: (err) => {
+          console.error('wx.login fail', err);
+          reject(err);
         }
       })
     })
@@ -38,25 +42,22 @@ App({
 
   _doServerLogin(code, resolve, reject) {
     wx.request({
-      url: `${FLASK_SERVER_URL}/api/login`,
+      url: `${API_BASE_URL}/api/login`,
       method: 'POST',
-      data: { 
-        code: code,
-        userInfo: { nickName: '测试用户' } // 自动带个默认昵称
-      }, 
+      data: { code: code }, // 真实登录时不传 userInfo，等用户授权
       success: (resp) => {
         if (resp.data.code === 0) {
           this.globalData.openid = resp.data.data.openid;
           console.log('登录成功，OpenID:', this.globalData.openid);
-          resolve(this.globalData.openid);
+          if (resolve) resolve(this.globalData.openid);
         } else {
-          console.error('登录失败', resp.data);
-          reject(resp.data);
+          console.error('后端登录失败', resp.data);
+          if (reject) reject(resp.data);
         }
       },
       fail: (err) => {
         console.error('连接服务器失败', err);
-        reject(err);
+        if (reject) reject(err);
       }
     })
   },
@@ -65,7 +66,7 @@ App({
     const doRequest = () => {
         return new Promise((resolve, reject) => {
             wx.request({
-                url: `${FLASK_SERVER_URL}${url}`,
+                url: `${API_BASE_URL}${url}`,
                 method: method,
                 data: { 
                     ...data, 
@@ -73,16 +74,26 @@ App({
                 },
                 header: { 'content-type': 'application/json' },
                 success: (res) => {
-                    if (res.statusCode === 200 && res.data.code === 0) resolve(res.data);
-                    else reject(res.data);
+                    if (res.statusCode === 200 && res.data.code === 0) {
+                        resolve(res.data);
+                    } else {
+                        // 如果是未登录错误 (401/404)，可以在这里统一处理
+                        reject(res.data);
+                    }
                 },
-                fail: reject
+                fail: (err) => {
+                    reject(err);
+                }
             })
         });
     };
 
     if (!this.globalData.openid) {
-        return this.login().then(doRequest);
+        // 如果没有 openid，尝试登录一次
+        return this.login().then(doRequest).catch(() => {
+            // 登录失败也拒绝请求，避免未登录数据污染
+            return Promise.reject({ msg: '请先登录' });
+        });
     } else {
         return doRequest();
     }

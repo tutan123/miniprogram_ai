@@ -1,8 +1,8 @@
 <view class="container">
-  <!-- 帖子流 -->
+  <!-- 帖子列表 -->
   <scroll-view scroll-y class="post-list" refresher-enabled="{{true}}" bindrefresherrefresh="onRefresh" refresher-triggered="{{isRefreshing}}">
     <block wx:for="{{posts}}" wx:key="id">
-      <!-- 绑定点击事件到卡片 -->
+      <!-- 卡片点击跳转详情 -->
       <view class="post-card" bindtap="onTapPost" data-id="{{item.id}}">
         <view class="card-header">
           <view class="avatar-circle">{{item.nickname[0]}}</view>
@@ -14,11 +14,11 @@
         
         <view class="card-body">
           <text class="post-title">{{item.title}}</text>
-          <!-- 内容截断显示 -->
           <text class="post-content text-truncate">{{item.content}}</text>
+          
+          <!-- 图片展示 (使用 baseUrl 拼接) -->
           <block wx:if="{{item.images && item.images.length > 0}}">
-             <!-- 阻止冒泡，防止点击图片也跳转 -->
-             <image src="{{'http://127.0.0.1:8080' + item.images[0]}}" mode="aspectFill" class="post-image" catchtap="stopProp"></image>
+             <image src="{{baseUrl + item.images[0]}}" mode="aspectFill" class="post-image" catchtap="stopProp"></image>
           </block>
         </view>
         
@@ -29,7 +29,7 @@
             <text class="like-count">{{item.likes}}</text>
           </view>
           <!-- 评论按钮 -->
-          <view class="action-btn" catchtap="onTapComment" data-id="{{item.id}}">
+          <view class="action-btn">
             <text>💬 {{item.comments_count}}</text>
           </view>
         </view>
@@ -52,7 +52,6 @@
       <view class="modal-title">发布新动态</view>
       <input class="input-field" placeholder="标题" model:value="{{newTitle}}" />
       
-      <!-- 带字数统计的文本域 -->
       <view class="textarea-wrap">
         <textarea 
           class="textarea-field" 
@@ -63,7 +62,6 @@
         <text class="word-count">{{newContent.length}}/500</text>
       </view>
       
-      <!-- 图片选择区 -->
       <view class="image-picker" bindtap="onChooseImage">
         <block wx:if="{{tempImage}}">
           <image src="{{tempImage}}" mode="aspectFill" class="preview-img"></image>

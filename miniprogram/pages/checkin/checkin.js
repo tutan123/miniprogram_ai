@@ -1,12 +1,14 @@
 // pages/checkin/checkin.js
 const app = getApp()
+const BASE_URL = app.globalData.baseUrl || '';
 
 Page({
   data: {
     currentTab: 'tasks',
     points: 0,
     tasks: [],
-    products: []
+    products: [],
+    baseUrl: BASE_URL
   },
 
   onShow() {
@@ -21,8 +23,6 @@ Page({
   refreshData() {
     wx.showLoading({ title: '加载中...' })
     
-    // [FIX] 替换旧接口 /api/user/sync -> /api/user/info
-    // 并改为 GET 方法
     const p1 = app.request('/api/user/info', 'GET').catch(e => ({data: {points: 0}}));
     const p2 = app.request('/api/tasks', 'GET').catch(e => ({data: []}));
     const p3 = app.request('/api/products', 'GET').catch(e => ({data: []}));
@@ -36,6 +36,7 @@ Page({
         })
         wx.hideLoading()
       })
+      .catch(() => wx.hideLoading())
   },
 
   onCompleteTask(e) {
@@ -70,12 +71,16 @@ Page({
         lng: lng
     }).then(res => {
         wx.hideLoading()
-        wx.showToast({ title: res.msg || '打卡成功', icon: 'success' })
-        this.setData({ points: res.data.current_points })
-        this.refreshData() 
+        if(res.code === 0) {
+            wx.showToast({ title: res.msg || '打卡成功', icon: 'success' })
+            this.setData({ points: res.data.current_points })
+            this.refreshData() 
+        } else {
+            wx.showModal({ title: '提示', content: res.msg || '打卡失败', showCancel: false })
+        }
     }).catch(res => {
         wx.hideLoading()
-        wx.showToast({ title: res.msg || '失败', icon: 'none' })
+        wx.showToast({ title: res.msg || '打卡失败', icon: 'none' })
     })
   },
 
@@ -87,9 +92,23 @@ Page({
       success: (res) => {
         if (res.confirm) {
             app.request('/api/shop/exchange', 'POST', { productId: productId })
-              .then(res => {
-                wx.showToast({ title: '兑换成功', icon: 'success' })
-                this.setData({ points: res.data.current_points })
+              .then(resp => {
+                if (resp.code === 0) {
+                    wx.showToast({ title: '兑换成功', icon: 'success' })
+                    this.setData({ points: resp.data.current_points })
+                    this.refreshData()
+                } else {
+                    if(resp.msg && resp.msg.includes('地址')) {
+                        wx.showModal({
+                            title: '提示',
+                            content: '请先完善收货地址',
+                            confirmText: '去设置',
+                            success: (r) => { if(r.confirm) wx.navigateTo({ url: '/pages/address/address' }) }
+                        })
+                    } else {
+                        wx.showToast({ title: resp.msg || '兑换失败', icon: 'none' })
+                    }
+                }
               })
               .catch(res => {
                  if(res && res.msg) wx.showToast({ title: res.msg, icon: 'none' })

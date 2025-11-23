@@ -39,18 +39,30 @@ Page({
     })
   },
 
-  onContact() {
-    wx.navigateTo({ url: '/pages/complaint/complaint' })
+  // 路由跳转方法 (增加 log 方便调试)
+  onViewOrders() { 
+    console.log('Nav to Orders');
+    wx.navigateTo({ url: '/pages/orders/orders' }) 
   },
   
-  onViewRecords() {
-    wx.navigateTo({ url: '/pages/records/records' })
+  onEditAddress() { 
+    console.log('Nav to Address');
+    wx.navigateTo({ url: '/pages/address/address' }) 
+  },
+
+  onViewRecords() { 
+    console.log('Nav to Records');
+    wx.navigateTo({ url: '/pages/records/records' }) 
+  },
+
+  onContact() { 
+    wx.navigateTo({ url: '/pages/complaint/complaint' }) 
   },
   
   onAbout() {
     wx.showModal({
       title: '关于我们',
-      content: 'WeChat Map App v2.0\nPowered by Next.js Fullstack',
+      content: 'WeChat Map App v2.0',
       showCancel: false
     })
   }

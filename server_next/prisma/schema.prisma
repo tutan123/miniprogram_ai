@@ -18,6 +18,12 @@ model User {
   avatarUrl String?
   points    Int      @default(0)
   level     Int      @default(1)
+  
+  // 收货信息
+  realName  String?
+  phone     String?
+  address   String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -37,6 +43,10 @@ model Task {
   radius    Int      @default(50)
   isActive  Boolean  @default(true)
   
+  // 坐标字段
+  target_lat Float?
+  target_lng Float?
+  
   records   Record[]
 }
 
@@ -46,6 +56,7 @@ model Product {
   price     Int
   image     String?
   stock     Int      @default(999)
+  status    String   @default("active")  // active: 销售中, inactive: 已下架
   
   orders    Order[]
 }
@@ -70,6 +81,10 @@ model Order {
   points    Int
   status    String   @default("pending")
   remark    String?
+  
+  // 订单快照地址
+  snapshotAddress String?
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

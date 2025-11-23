@@ -15,7 +15,8 @@ export async function createProduct(formData: FormData) {
       name,
       price,
       stock,
-      image
+      image,
+      status: 'active'
     }
   })
 
@@ -43,11 +44,59 @@ export async function updateProduct(id: number, formData: FormData) {
   redirect('/admin/products')
 }
 
+// 下架商品（软删除）
+export async function deactivateProduct(id: number) {
+  try {
+    await prisma.product.update({
+      where: { id },
+      data: { status: 'inactive' }
+    })
+    
+    revalidatePath('/admin/products')
+    return { success: true, message: '下架成功' }
+  } catch (error: any) {
+    console.error('下架商品失败:', error)
+    return { success: false, message: error.message || '下架失败，请重试' }
+  }
+}
+
+// 上架商品
+export async function activateProduct(id: number) {
+  try {
+    await prisma.product.update({
+      where: { id },
+      data: { status: 'active' }
+    })
+    
+    revalidatePath('/admin/products')
+    return { success: true, message: '上架成功' }
+  } catch (error: any) {
+    console.error('上架商品失败:', error)
+    return { success: false, message: error.message || '上架失败，请重试' }
+  }
+}
+
+// 删除商品（硬删除，需要检查关联订单）
 export async function deleteProduct(id: number) {
-  await prisma.product.delete({
-    where: { id }
-  })
-  
-  revalidatePath('/admin/products')
+  try {
+    // 检查是否有关联的订单
+    const orderCount = await prisma.order.count({
+      where: { productId: id }
+    })
+    
+    if (orderCount > 0) {
+      throw new Error(`该商品已有 ${orderCount} 个订单，无法删除。建议先下架商品。`)
+    }
+    
+    await prisma.product.delete({
+      where: { id }
+    })
+    
+    revalidatePath('/admin/products')
+    return { success: true, message: '删除成功' }
+  } catch (error: any) {
+    console.error('删除商品失败:', error)
+    return { success: false, message: error.message || '删除失败，请重试' }
+  }
 }
 

@@ -1,6 +1,6 @@
 // pages/community/community.js
 const app = getApp()
-const FLASK_SERVER_URL = 'http://127.0.0.1:8080';
+const BASE_URL = app.globalData.baseUrl;
 
 Page({
   data: {
@@ -9,50 +9,63 @@ Page({
     showCreateModal: false,
     newTitle: '',
     newContent: '',
-    tempImage: ''
+    tempImage: '',
+    baseUrl: BASE_URL
   },
 
-  // ... (其他方法保持不变，只修改图片选择和发布逻辑) ...
-
-  onShow() {
+  onLoad() {
+    // 首次加载
     this.loadPosts()
   },
 
-  onTapPost(e) {
-    const id = e.currentTarget.dataset.id
-    wx.navigateTo({ url: `/pages/post/detail?id=${id}` })
+  onShow() {
+    // 每次显示页面时，静默刷新（不显示loading，体验更好）
+    // 避免 setData 过于频繁导致死循环
+    // this.loadPosts() 
   },
 
-  onTapComment(e) {
-    const id = e.currentTarget.dataset.id
-    wx.navigateTo({ url: `/pages/post/detail?id=${id}&focus=true` })
-  },
-
-  onRefresh() {
+  onPullDownRefresh() {
     this.setData({ isRefreshing: true })
     this.loadPosts().then(() => {
       this.setData({ isRefreshing: false })
+      wx.stopPullDownRefresh()
     })
   },
 
+  onRefresh() {
+    this.onPullDownRefresh()
+  },
+
   loadPosts() {
+    console.log('[Community] Start loading posts...')
     return app.request('/api/posts', 'GET')
       .then(res => {
+        console.log('[Community] Data received:', res)
         if (res.code === 0) {
           this.setData({ posts: res.data })
         } else {
+          console.error('[Community] API Error:', res)
           wx.showToast({ title: '加载失败', icon: 'none' })
         }
       })
       .catch(err => {
-        console.error(err)
+        console.error('[Community] Network Error:', err)
+        wx.showToast({ title: '网络错误', icon: 'none' })
       })
   },
 
-  // 修改：限制只能选 1 张图
+  // ... (其他方法保持不变，上传逻辑已修复过) ...
+  onTapPost(e) {
+    const id = e.currentTarget.dataset.id
+    console.log('[Community] Tap post:', id)
+    wx.navigateTo({ url: `/pages/post/detail?id=${id}` })
+  },
+
+  // ... (其他方法省略)
+  
   onChooseImage() {
     wx.chooseImage({
-      count: 1, // 限制 1 张
+      count: 1,
       sizeType: ['compressed'],
       success: (res) => {
         this.setData({ tempImage: res.tempFilePaths[0] })
@@ -65,18 +78,11 @@ Page({
       wx.showToast({ title: '请填写完整', icon: 'none' })
       return
     }
-    
-    // 前端校验字数
-    if (this.data.newContent.length > 500) {
-      wx.showToast({ title: '内容不能超过500字', icon: 'none' })
-      return
-    }
-
     wx.showLoading({ title: '发布中' })
 
     if (this.data.tempImage) {
       wx.uploadFile({
-        url: `${FLASK_SERVER_URL}/api/upload`,
+        url: `${BASE_URL}/api/upload`,
         filePath: this.data.tempImage,
         name: 'file',
         success: (res) => {
@@ -105,18 +111,9 @@ Page({
       images: images
     }).then(res => {
       wx.hideLoading()
-      if (res.code === 0) {
-        wx.showToast({ title: '发布成功', icon: 'success' })
-        this.setData({ 
-          showCreateModal: false, 
-          newTitle: '', 
-          newContent: '',
-          tempImage: '' 
-        })
-        this.loadPosts()
-      } else {
-        wx.showToast({ title: res.msg || '发布失败', icon: 'none' })
-      }
+      wx.showToast({ title: '发布成功', icon: 'success' })
+      this.setData({ showCreateModal: false, newTitle: '', newContent: '', tempImage: '' })
+      this.loadPosts()
     }).catch(() => {
       wx.hideLoading()
       wx.showToast({ title: '网络错误', icon: 'none' })
@@ -125,19 +122,10 @@ Page({
 
   onLikePost(e) {
     const postId = e.currentTarget.dataset.id
-    const index = this.data.posts.findIndex(p => p.id === postId)
-    if (index === -1) return
-    
-    const post = this.data.posts[index]
-    const isLiked = !post.is_liked
-    const newLikes = isLiked ? post.likes + 1 : post.likes - 1
-    
-    this.setData({
-      [`posts[${index}].is_liked`]: isLiked,
-      [`posts[${index}].likes`]: newLikes
+    app.request('/api/post/like', 'POST', { postId }).then(() => {
+        // 简单处理：操作后刷新列表
+        this.loadPosts()
     })
-
-    app.request('/api/post/like', 'POST', { postId })
   },
 
   onShowCreateModal() { this.setData({ showCreateModal: true }) },

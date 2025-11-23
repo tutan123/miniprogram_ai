@@ -1,0 +1,41 @@
+<view class="container">
+  <view class="logo-area">
+    <image class="logo" src="/images/icons/home-active.png" mode="aspectFit"></image>
+    <text class="app-name">WeChat Map App</text>
+    <text class="slogan">探索城市，记录足迹</text>
+  </view>
+
+  <view class="action-area">
+    <button class="login-btn" bindtap="onLogin">
+      <image class="wechat-icon" src="/images/icons/usercenter.png"></image> 
+      微信一键登录
+    </button>
+    
+    <view class="agreement-box">
+      <view class="checkbox {{agreed ? 'checked' : ''}}" bindtap="onToggleAgree">
+        <text wx:if="{{agreed}}" class="check-mark">✔</text>
+      </view>
+      <view class="text">
+        我已阅读并同意 <text class="link" bindtap="onShowPrivacy">《用户服务协议与隐私政策》</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 简易隐私协议弹窗 -->
+  <view class="modal-mask" wx:if="{{showPrivacy}}">
+    <view class="modal-content">
+      <view class="modal-title">用户服务协议与隐私政策</view>
+      <scroll-view scroll-y class="modal-body">
+        <text class="p">欢迎使用 WeChat Map App！我们非常重视您的隐私保护和个人信息安全。</text>
+        <text class="h3">1. 我们如何收集信息</text>
+        <text class="p">为了提供打卡、导航等服务，我们会申请您的地理位置权限。为了记录您的活动，我们会获取您的头像和昵称。</text>
+        <text class="h3">2. 信息的使用</text>
+        <text class="p">您的位置信息仅用于判断打卡距离，不会被永久存储轨迹。您的积分数据将存储在我们的服务器上。</text>
+        <text class="h3">3. 您的权利</text>
+        <text class="p">您可以随时在“我的”页面查看或删除您的数据。</text>
+      </scroll-view>
+      <button class="modal-btn" bindtap="onClosePrivacy">我已阅读</button>
+    </view>
+  </view>
+</view>
+

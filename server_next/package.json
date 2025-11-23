@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8080",
+    "dev": "next dev -H 0.0.0.0 -p 8080",
     "build": "prisma generate && next build",
-    "start": "next start -p 8080",
+    "start": "next start -H 0.0.0.0 -p 8080",
     "lint": "next lint",
     "db:push": "prisma db push",
-    "db:seed": "npx ts-node --compiler-options {\"module\":\"commonjs\"} prisma/seed.ts",
+    "db:seed": "npx ts-node -O \"{\\\"module\\\":\\\"commonjs\\\"}\" prisma/seed.ts",
     "db:studio": "prisma studio"
   },
   "dependencies": {

@@ -1,0 +1,13 @@
+.container { background: #f8f9fa; min-height: 100vh; padding: 20rpx; }
+.order-card { background: white; border-radius: 16rpx; padding: 24rpx; margin-bottom: 20rpx; }
+.header { display: flex; justify-content: space-between; margin-bottom: 20rpx; font-size: 24rpx; color: #999; border-bottom: 1rpx solid #f1f2f6; padding-bottom: 16rpx; }
+.status.pending { color: #e67e22; }
+.status.shipped { color: #27ae60; }
+.content { display: flex; margin-bottom: 20rpx; }
+.img { width: 120rpx; height: 120rpx; border-radius: 12rpx; background: #eee; margin-right: 20rpx; }
+.info { display: flex; flex-direction: column; justify-content: center; }
+.name { font-size: 30rpx; font-weight: bold; color: #333; margin-bottom: 10rpx; }
+.points { font-size: 26rpx; color: #e17055; }
+.footer { background: #f8f9fa; padding: 16rpx; border-radius: 8rpx; font-size: 24rpx; color: #636e72; }
+.empty { text-align: center; color: #b2bec3; margin-top: 100rpx; }
+

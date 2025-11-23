@@ -1,137 +1,29 @@
-.container {
-  background-color: #f8f9fa;
-  height: 100vh; /* 确保容器高度 */
-  width: 100%;
-  position: relative;
+/* 增加点击态样式，提升交互感 */
+.menu-hover {
+  background-color: #f0f0f0 !important;
 }
 
-.header-bg {
-  height: 260rpx;
-  width: 100%;
-  background: linear-gradient(135deg, #6c5ce7, #a29bfe);
-  border-bottom-left-radius: 40rpx;
-  border-bottom-right-radius: 40rpx;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
+.hover-stat {
+  opacity: 0.7;
 }
 
-.profile-card {
-  position: relative; /* 提升层级 */
-  z-index: 1;
-  margin: 80rpx 40rpx 40rpx; /* 调整 margin top 以适应背景 */
-  background: white;
-  border-radius: 30rpx;
-  padding: 40rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.05);
-}
-
-.avatar {
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 50%;
-  border: 6rpx solid white;
-  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.1);
-  margin-bottom: 20rpx;
-}
-
-.avatar-placeholder {
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 50%;
-  background: #f1f2f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 60rpx;
-  color: #b2bec3;
-  margin-bottom: 20rpx;
-}
-
-.nickname {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #2d3436;
-  margin-bottom: 10rpx;
-}
-
-.badge {
-  background: #ffeaa7;
-  color: #d35400;
-  padding: 6rpx 20rpx;
-  border-radius: 20rpx;
-  font-size: 22rpx;
-  font-weight: bold;
-}
-
-.stats-row {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: white;
-  margin: 0 40rpx 40rpx;
-  padding: 30rpx;
-  border-radius: 24rpx;
-  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02);
-  position: relative;
-  z-index: 1;
-}
-
-.stat-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-}
-
-.stat-num {
-  font-size: 40rpx;
-  font-weight: bold;
-  color: #2d3436;
-}
-
-.stat-label {
-  font-size: 24rpx;
-  color: #b2bec3;
-  margin-top: 6rpx;
-}
-
-.divider {
-  width: 2rpx;
-  height: 40rpx;
-  background: #f1f2f6;
-}
-
-.menu-group {
-  margin: 0 40rpx;
-  background: white;
-  border-radius: 24rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02);
-  position: relative;
-  z-index: 1;
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  padding: 30rpx;
-  border-bottom: 1rpx solid #f1f2f6;
-}
-
-.menu-icon {
-  margin-right: 20rpx;
-}
-
-.menu-text {
-  flex: 1;
-  font-size: 30rpx;
-}
-
-.menu-arrow {
-  color: #ccc;
-}
+/* ... 其他原有样式 ... */
+.container { background-color: #f8f9fa; height: 100vh; }
+.header-bg { height: 260rpx; width: 100%; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-bottom-left-radius: 40rpx; border-bottom-right-radius: 40rpx; position: absolute; top: 0; left: 0; z-index: 0; }
+.profile-card { position: relative; z-index: 1; margin: 80rpx 40rpx 40rpx; background: white; border-radius: 30rpx; padding: 40rpx; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10rpx 30rpx rgba(0,0,0,0.05); }
+.avatar, .avatar-placeholder { width: 140rpx; height: 140rpx; border-radius: 50%; border: 6rpx solid white; box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.1); margin-bottom: 20rpx; display: flex; align-items: center; justify-content: center; background: #f1f2f6; font-size: 60rpx; color: #b2bec3; }
+.nickname { font-size: 36rpx; font-weight: bold; color: #2d3436; margin-bottom: 10rpx; }
+.badge { background: #ffeaa7; color: #d35400; padding: 6rpx 20rpx; border-radius: 20rpx; font-size: 22rpx; font-weight: bold; }
+.stats-row { display: flex; justify-content: space-around; align-items: center; background: white; margin: 0 40rpx 40rpx; padding: 30rpx; border-radius: 24rpx; box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02); position: relative; z-index: 1; }
+.stat-box { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.stat-num { font-size: 40rpx; font-weight: bold; color: #2d3436; }
+.stat-label { font-size: 24rpx; color: #b2bec3; margin-top: 6rpx; }
+.divider { width: 2rpx; height: 40rpx; background: #f1f2f6; }
+.menu-group { margin: 0 40rpx; background: white; border-radius: 24rpx; overflow: hidden; box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.02); position: relative; z-index: 1; }
+.menu-item { display: flex; justify-content: space-between; align-items: center; padding: 30rpx; border-bottom: 1rpx solid #f1f2f6; transition: background 0.2s; }
+.menu-item:last-child { border-bottom: none; }
+.left { display: flex; align-items: center; }
+.menu-icon { margin-right: 20rpx; font-size: 32rpx; }
+.menu-text { font-size: 30rpx; color: #2d3436; }
+.menu-arrow { color: #ccc; font-size: 30rpx; }
+.login-btn { background: #6c5ce7; color: white; font-size: 28rpx; border-radius: 40rpx; padding: 10rpx 50rpx; }

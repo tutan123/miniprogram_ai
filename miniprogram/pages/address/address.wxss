@@ -1,0 +1,9 @@
+.container { background: #f8f9fa; min-height: 100vh; padding: 30rpx; }
+.form-group { background: white; border-radius: 16rpx; padding: 0 30rpx; margin-bottom: 40rpx; }
+.item { display: flex; align-items: center; border-bottom: 1rpx solid #f1f2f6; padding: 30rpx 0; }
+.item:last-child { border-bottom: none; }
+.label { width: 160rpx; font-size: 30rpx; color: #333; }
+.input { flex: 1; font-size: 30rpx; }
+.textarea { flex: 1; height: 120rpx; font-size: 30rpx; padding-top: 10rpx; }
+.save-btn { background: #00b894; color: white; border-radius: 44rpx; font-size: 32rpx; }
+

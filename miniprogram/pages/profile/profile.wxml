@@ -14,7 +14,7 @@
   </view>
 
   <view class="stats-row">
-    <view class="stat-box" bindtap="onViewRecords">
+    <view class="stat-box" bindtap="onViewRecords" hover-class="hover-stat">
       <text class="stat-num">{{points}}</text>
       <text class="stat-label">积分</text>
     </view>
@@ -31,14 +31,35 @@
   </view>
 
   <view class="menu-group">
-    <view class="menu-item" bindtap="onContact">
-      <text class="menu-icon">🛎️</text>
-      <text class="menu-text">帮助与反馈</text>
+    <view class="menu-item" bindtap="onViewOrders" hover-class="menu-hover">
+      <view class="left">
+        <text class="menu-icon">📦</text>
+        <text class="menu-text">我的订单</text>
+      </view>
       <text class="menu-arrow">></text>
     </view>
-    <view class="menu-item" bindtap="onAbout">
-      <text class="menu-icon">ℹ️</text>
-      <text class="menu-text">关于我们</text>
+    
+    <view class="menu-item" bindtap="onEditAddress" hover-class="menu-hover">
+      <view class="left">
+        <text class="menu-icon">📍</text>
+        <text class="menu-text">收货地址管理</text>
+      </view>
+      <text class="menu-arrow">></text>
+    </view>
+    
+    <view class="menu-item" bindtap="onContact" hover-class="menu-hover">
+      <view class="left">
+        <text class="menu-icon">🛎️</text>
+        <text class="menu-text">帮助与反馈</text>
+      </view>
+      <text class="menu-arrow">></text>
+    </view>
+    
+    <view class="menu-item" bindtap="onAbout" hover-class="menu-hover">
+      <view class="left">
+        <text class="menu-icon">ℹ️</text>
+        <text class="menu-text">关于我们</text>
+      </view>
       <text class="menu-arrow">></text>
     </view>
   </view>
