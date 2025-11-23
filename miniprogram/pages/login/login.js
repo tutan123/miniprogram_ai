@@ -33,11 +33,8 @@ Page({
       success: (res) => {
         wx.showLoading({ title: '登录中' })
         
-        // 使用 app.js 里的登录逻辑
-        app.request('/api/login', 'POST', { 
-            code: 'test_code', // 真实环境 app.js 会自动处理 code
-            userInfo: res.userInfo 
-        }).then(() => {
+        // 使用 app.js 里的完整登录方法（会同时获取 openid 和用户信息）
+        app.login(res.userInfo).then(() => {
             wx.hideLoading()
             wx.showToast({ title: '登录成功', icon: 'success' })
             
@@ -47,7 +44,7 @@ Page({
             }, 1000)
         }).catch(err => {
             wx.hideLoading()
-            wx.showToast({ title: '登录失败', icon: 'none' })
+            wx.showToast({ title: err.msg || '登录失败', icon: 'none' })
         })
       },
       fail: () => {

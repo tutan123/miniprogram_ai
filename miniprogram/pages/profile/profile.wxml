@@ -3,8 +3,8 @@
 
   <view class="profile-card">
     <block wx:if="{{!hasUserInfo}}">
-      <view class="avatar-placeholder" bindtap="getUserProfile">?</view>
-      <button class="login-btn" bindtap="getUserProfile">点击登录</button>
+      <view class="avatar-placeholder" bindtap="goToLogin">?</view>
+      <button class="login-btn" bindtap="goToLogin">点击登录</button>
     </block>
     <block wx:else>
       <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
