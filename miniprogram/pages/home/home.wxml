@@ -5,13 +5,42 @@
     latitude="{{latitude}}"
     longitude="{{longitude}}"
     markers="{{markers}}"
+    polylines="{{polylines}}"
     show-location
+    bindmarkertap="onMarkerTap"
   ></map>
   
   <!-- 悬浮按钮组 -->
   <view class="controls">
     <cover-view class="btn" bindtap="onLocateMe">📍 定位</cover-view>
     <cover-view class="btn primary" bindtap="onSelectRoute">🗺️ 选路线</cover-view>
+  </view>
+
+  <!-- 兴趣点详情弹窗 -->
+  <view class="poi-detail-modal" wx:if="{{showPOIDetail && selectedPOI}}" bindtap="closePOIDetail">
+    <view class="poi-detail-content" catchtap="stopPropagation">
+      <view class="poi-detail-header">
+        <text class="poi-detail-title">{{selectedPOI.name}}</text>
+        <text class="poi-detail-close" bindtap="closePOIDetail">✕</text>
+      </view>
+      <view class="poi-detail-body">
+        <view class="poi-detail-info" wx:if="{{selectedPOI.address}}">
+          <text class="poi-info-label">📍 地址：</text>
+          <text class="poi-info-value">{{selectedPOI.address}}</text>
+        </view>
+        <view class="poi-detail-description">
+          <text class="poi-description-text">{{selectedPOI.description}}</text>
+        </view>
+      </view>
+      <view class="poi-detail-footer">
+        <button class="poi-nav-btn" bindtap="navigateToPOI" hover-class="poi-nav-btn-hover">🗺️ 导航到此</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 路线信息提示（选中路线时显示） -->
+  <view class="route-info" wx:if="{{selectedRoute}}">
+    <text class="route-info-text">📍 已选择：{{selectedRoute.name}}</text>
   </view>
 </view>
 

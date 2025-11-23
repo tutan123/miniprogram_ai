@@ -93,7 +93,22 @@ model Route {
   id      Int    @id @default(autoincrement())
   key     String @unique
   name    String
-  points  String
+  points  String  // JSON 字符串: [{lat, lng, name}, ...]
+}
+
+// 兴趣点（POI）
+model Poi {
+  id          Int     @id @default(autoincrement())
+  name        String
+  lat         Float
+  lng         Float
+  description String  // 详细介绍
+  category    String  @default("attraction")  // attraction: 景点, food: 美食, shopping: 购物
+  image       String? // 图片 URL
+  address     String? // 地址
+  createdAt   DateTime @default(now())
+
+  @@map("pois")  // 指定表名为 pois
 }
 
 // --- 社区模块 ---
