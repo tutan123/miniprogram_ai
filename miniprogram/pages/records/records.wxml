@@ -1,0 +1,21 @@
+<view class="container">
+  <view class="header">
+    <text class="title">积分明细</text>
+  </view>
+
+  <view class="list">
+    <block wx:for="{{records}}" wx:key="id">
+      <view class="item">
+        <view class="left">
+          <text class="name">{{item.task.title}}</text>
+          <text class="time">{{item.created_at}}</text>
+        </view>
+        <view class="right">
+          <text class="points">+{{item.task.reward}}</text>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{records.length === 0}}" class="empty">暂无记录</view>
+  </view>
+</view>
+

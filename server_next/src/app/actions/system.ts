@@ -34,4 +34,31 @@ export async function updateTask(id: number, formData: FormData) {
   redirect('/admin/tasks')
 }
 
-// ... 其他 actions
+// 修复：补充缺失的 updateSystemConfig
+export async function updateSystemConfig(formData: FormData) {
+  // 遍历所有以 cfg_ 开头的字段
+  for (const [key, value] of Array.from(formData.entries())) {
+    if (key.startsWith('cfg_')) {
+      const configKey = key.replace('cfg_', '')
+      await prisma.systemConfig.upsert({
+        where: { key: configKey },
+        update: { value: value as string },
+        create: { key: configKey, value: value as string }
+      })
+    }
+  }
+  
+  revalidatePath('/admin/settings')
+  // 设置页一般不需要跳转，留在当前页即可
+}
+
+export async function createAnnouncement(formData: FormData) {
+  const title = formData.get('title') as string
+  const content = formData.get('content') as string
+  
+  await prisma.announcement.create({
+    data: { title, content }
+  })
+  
+  revalidatePath('/admin')
+}

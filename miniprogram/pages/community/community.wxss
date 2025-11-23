@@ -1,4 +1,3 @@
-/* 社区页面美化 */
 .container {
   background-color: #f8f9fa;
   height: 100vh;
@@ -11,17 +10,13 @@
   padding: 20rpx;
 }
 
+/* 卡片样式 */
 .post-card {
   background: white;
   border-radius: 24rpx;
   padding: 30rpx;
   margin-bottom: 24rpx;
   box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.03);
-  transition: all 0.3s;
-}
-
-.post-card:active {
-  transform: scale(0.99);
 }
 
 .card-header {
@@ -77,12 +72,23 @@
   font-size: 28rpx;
   color: #636e72;
   line-height: 1.6;
+}
+
+.text-truncate {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
 
+.post-image {
+  width: 100%;
+  height: 300rpx;
+  border-radius: 12rpx;
+  margin-top: 16rpx;
+}
+
+/* 底部按钮 */
 .card-footer {
   border-top: 1rpx solid #f1f2f6;
   padding-top: 20rpx;
@@ -98,6 +104,11 @@
   padding: 10rpx 20rpx;
   background: #f1f2f6;
   border-radius: 30rpx;
+}
+
+.action-btn.active {
+  color: #e17055;
+  background: #ffeaa7;
 }
 
 .heart-icon {
@@ -127,7 +138,7 @@
   margin-top: -6rpx;
 }
 
-/* 弹窗 */
+/* 弹窗样式 */
 .modal-mask {
   position: fixed;
   top: 0;
@@ -179,15 +190,68 @@
   font-size: 30rpx;
 }
 
+/* 带统计的文本域 */
+.textarea-wrap {
+  position: relative;
+  margin-bottom: 20rpx;
+}
+
 .textarea-field {
-  background: #f1f2f6;
   width: 100%;
   height: 200rpx;
+  background: #f1f2f6;
   padding: 24rpx;
   box-sizing: border-box;
   border-radius: 16rpx;
-  margin-bottom: 40rpx;
   font-size: 30rpx;
+  margin-bottom: 0;
+}
+
+.word-count {
+  position: absolute;
+  bottom: 16rpx;
+  right: 24rpx;
+  font-size: 22rpx;
+  color: #b2bec3;
+}
+
+/* 图片选择器 */
+.image-picker {
+  margin-bottom: 30rpx;
+  position: relative;
+  width: 160rpx;
+}
+
+.preview-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+}
+
+.upload-btn {
+  width: 160rpx;
+  height: 160rpx;
+  background: #f1f2f6;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #636e72;
+  font-size: 22rpx;
+  border: 2rpx dashed #ccc;
+}
+
+.reselect-tip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  font-size: 20rpx;
+  text-align: center;
+  border-bottom-left-radius: 12rpx;
+  border-bottom-right-radius: 12rpx;
 }
 
 .modal-actions {
@@ -212,11 +276,7 @@
 }
 
 .empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 200rpx;
+  text-align: center;
   color: #b2bec3;
-  font-size: 28rpx;
-  gap: 20rpx;
+  margin-top: 100rpx;
 }

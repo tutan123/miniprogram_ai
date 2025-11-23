@@ -1,0 +1,61 @@
+<view class="container" wx:if="{{post}}">
+  <!-- 帖子主体 -->
+  <view class="post-card">
+    <view class="header">
+      <image src="{{post.user.avatarUrl}}" class="avatar"></image>
+      <view class="meta">
+        <text class="name">{{post.user.nickname}}</text>
+        <text class="time">{{post.created_at}}</text>
+      </view>
+    </view>
+    
+    <view class="content">
+      <text class="title">{{post.title}}</text>
+      <text class="body" user-select>{{post.content}}</text>
+    </view>
+
+    <view class="images" wx:if="{{post.images.length > 0}}">
+      <block wx:for="{{post.images}}" wx:key="*this">
+        <image 
+          src="{{'http://127.0.0.1:8080' + item}}" 
+          mode="widthFix" 
+          class="img"
+          bindtap="onPreviewImage"
+          data-src="{{'http://127.0.0.1:8080' + item}}"
+        ></image>
+      </block>
+    </view>
+  </view>
+
+  <!-- 评论区 -->
+  <view class="comments-section">
+    <view class="section-title">全部评论 ({{post.comments.length}})</view>
+    <block wx:for="{{post.comments}}" wx:key="id">
+      <view class="comment-item">
+        <image src="{{item.user.avatarUrl}}" class="comment-avatar"></image>
+        <view class="comment-content">
+          <view class="comment-header">
+            <text class="comment-name">{{item.user.nickname}}</text>
+            <text class="comment-time">{{item.created_at}}</text>
+          </view>
+          <text class="comment-text">{{item.content}}</text>
+        </view>
+      </view>
+    </block>
+    <view wx:if="{{post.comments.length === 0}}" class="empty-comment">暂无评论，快来抢沙发~</view>
+  </view>
+
+  <!-- 底部输入框 -->
+  <view class="footer-input">
+    <input 
+      class="input" 
+      placeholder="写下你的评论..." 
+      model:value="{{commentContent}}"
+      confirm-type="send"
+      bindconfirm="onSubmitComment"
+    />
+    <button class="send-btn" bindtap="onSubmitComment">发送</button>
+  </view>
+</view>
+
+

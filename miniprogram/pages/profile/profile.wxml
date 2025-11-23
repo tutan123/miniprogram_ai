@@ -14,7 +14,7 @@
   </view>
 
   <view class="stats-row">
-    <view class="stat-box">
+    <view class="stat-box" bindtap="onViewRecords">
       <text class="stat-num">{{points}}</text>
       <text class="stat-label">积分</text>
     </view>

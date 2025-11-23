@@ -31,9 +31,8 @@ Page({
           userInfo: res.userInfo,
           hasUserInfo: true
         })
-        // 更新后端用户信息
         app.request('/api/login', 'POST', { 
-            code: 'test_code', // 如果处于真实模式，这里 app.js 会处理
+            code: 'test_code', 
             userInfo: res.userInfo 
         })
       }
@@ -41,8 +40,11 @@ Page({
   },
 
   onContact() {
-    // 跳转到新做的投诉页面
     wx.navigateTo({ url: '/pages/complaint/complaint' })
+  },
+  
+  onViewRecords() {
+    wx.navigateTo({ url: '/pages/records/records' })
   },
   
   onAbout() {

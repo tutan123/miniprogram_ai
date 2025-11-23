@@ -1,0 +1,51 @@
+.container {
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding: 30rpx;
+}
+
+.header {
+  margin-bottom: 30rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2d3436;
+}
+
+.item {
+  background: white;
+  padding: 30rpx;
+  border-radius: 16rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2rpx 10rpx rgba(0,0,0,0.02);
+}
+
+.name {
+  font-size: 30rpx;
+  color: #333;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.points {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #00b894;
+}
+
+.empty {
+  text-align: center;
+  color: #b2bec3;
+  margin-top: 100rpx;
+}
+

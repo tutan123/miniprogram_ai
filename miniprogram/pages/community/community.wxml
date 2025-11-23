@@ -2,7 +2,8 @@
   <!-- 帖子流 -->
   <scroll-view scroll-y class="post-list" refresher-enabled="{{true}}" bindrefresherrefresh="onRefresh" refresher-triggered="{{isRefreshing}}">
     <block wx:for="{{posts}}" wx:key="id">
-      <view class="post-card">
+      <!-- 绑定点击事件到卡片 -->
+      <view class="post-card" bindtap="onTapPost" data-id="{{item.id}}">
         <view class="card-header">
           <view class="avatar-circle">{{item.nickname[0]}}</view>
           <view class="user-meta">
@@ -13,24 +14,30 @@
         
         <view class="card-body">
           <text class="post-title">{{item.title}}</text>
-          <text class="post-content">{{item.content}}</text>
+          <!-- 内容截断显示 -->
+          <text class="post-content text-truncate">{{item.content}}</text>
+          <block wx:if="{{item.images && item.images.length > 0}}">
+             <!-- 阻止冒泡，防止点击图片也跳转 -->
+             <image src="{{'http://127.0.0.1:8080' + item.images[0]}}" mode="aspectFill" class="post-image" catchtap="stopProp"></image>
+          </block>
         </view>
         
         <view class="card-footer">
-          <view class="action-btn" bindtap="onLikePost" data-id="{{item.id}}">
-            <text class="heart-icon">❤️</text>
+          <!-- 点赞按钮 -->
+          <view class="action-btn {{item.is_liked ? 'active' : ''}}" catchtap="onLikePost" data-id="{{item.id}}">
+            <text class="heart-icon">{{item.is_liked ? '❤️' : '🤍'}}</text>
             <text class="like-count">{{item.likes}}</text>
           </view>
-          <view class="action-btn">
-            <text>💬 评论</text>
+          <!-- 评论按钮 -->
+          <view class="action-btn" catchtap="onTapComment" data-id="{{item.id}}">
+            <text>💬 {{item.comments_count}}</text>
           </view>
         </view>
       </view>
     </block>
     
     <view wx:if="{{posts.length === 0}}" class="empty-state">
-      <image src="/images/icons/goods.png" mode="aspectFit" style="width: 100rpx; height: 100rpx; opacity: 0.3;"></image>
-      <text>还没有人发帖，来做第一个吧~</text>
+      <text>还没有内容，快来发布第一条吧~</text>
     </view>
   </scroll-view>
 
@@ -39,12 +46,34 @@
     <text class="fab-icon">+</text>
   </view>
 
-  <!-- 弹窗 -->
+  <!-- 发布弹窗 -->
   <view class="modal-mask {{showCreateModal ? 'visible' : ''}}" bindtap="onCloseCreateModal">
     <view class="modal-panel" catchtap="stopProp">
       <view class="modal-title">发布新动态</view>
-      <input class="input-field" placeholder="取个吸引人的标题..." model:value="{{newTitle}}" />
-      <textarea class="textarea-field" placeholder="分享你的打卡心得..." model:value="{{newContent}}" maxlength="200"></textarea>
+      <input class="input-field" placeholder="标题" model:value="{{newTitle}}" />
+      
+      <!-- 带字数统计的文本域 -->
+      <view class="textarea-wrap">
+        <textarea 
+          class="textarea-field" 
+          placeholder="正文 (500字以内)..." 
+          model:value="{{newContent}}" 
+          maxlength="500"
+        ></textarea>
+        <text class="word-count">{{newContent.length}}/500</text>
+      </view>
+      
+      <!-- 图片选择区 -->
+      <view class="image-picker" bindtap="onChooseImage">
+        <block wx:if="{{tempImage}}">
+          <image src="{{tempImage}}" mode="aspectFill" class="preview-img"></image>
+          <view class="reselect-tip">点击更换</view>
+        </block>
+        <block wx:else>
+          <view class="upload-btn">📷 添加图片 (限1张)</view>
+        </block>
+      </view>
+
       <view class="modal-actions">
         <button class="cancel-btn" bindtap="onCloseCreateModal">取消</button>
         <button class="submit-btn" bindtap="onSubmitPost">发布</button>

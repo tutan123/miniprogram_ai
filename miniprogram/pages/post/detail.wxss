@@ -1,0 +1,157 @@
+.container {
+  background: #f8f9fa;
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+.post-card {
+  background: white;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  background: #eee;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 30rpx;
+  color: #2d3436;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #b2bec3;
+}
+
+.content {
+  margin-bottom: 20rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.body {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.images .img {
+  width: 100%;
+  border-radius: 12rpx;
+  margin-top: 10rpx;
+}
+
+.comments-section {
+  background: white;
+  padding: 30rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  border-left: 8rpx solid #6c5ce7;
+  padding-left: 16rpx;
+  margin-bottom: 30rpx;
+}
+
+.comment-item {
+  display: flex;
+  margin-bottom: 30rpx;
+}
+
+.comment-avatar {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+  background: #eee;
+}
+
+.comment-content {
+  flex: 1;
+  border-bottom: 1rpx solid #f1f2f6;
+  padding-bottom: 20rpx;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.comment-name {
+  font-size: 26rpx;
+  color: #636e72;
+}
+
+.comment-time {
+  font-size: 22rpx;
+  color: #b2bec3;
+}
+
+.comment-text {
+  font-size: 28rpx;
+  color: #2d3436;
+}
+
+.empty-comment {
+  text-align: center;
+  color: #b2bec3;
+  font-size: 26rpx;
+  padding: 40rpx 0;
+}
+
+.footer-input {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-top: 1rpx solid #eee;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.input {
+  flex: 1;
+  background: #f1f2f6;
+  border-radius: 30rpx;
+  padding: 16rpx 30rpx;
+  font-size: 28rpx;
+  margin-right: 20rpx;
+}
+
+.send-btn {
+  background: #6c5ce7;
+  color: white;
+  font-size: 26rpx;
+  border-radius: 30rpx;
+  margin: 0;
+  padding: 14rpx 30rpx;
+}
+
+
